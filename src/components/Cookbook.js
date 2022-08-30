@@ -2,10 +2,11 @@
 import React, { useState,useEffect } from "react"
 import { Link } from 'react-router-dom';
 import { ApplicationViews } from "./ApplicationViews"
+import { NavBar } from "./nav/NavBar";
 // import { Login } from "./auth/Login"
 // import { Register } from "./auth/Register"
 
-import Navigation from "./nav/Navigation"
+// import Navigation from "./nav/Navigation"
 
 
 export const Cookbook = () => {
@@ -24,7 +25,8 @@ export const Cookbook = () => {
       <header className="App-header">
 
       </header>
-      <Navigation token={token} user={user} />
+      {/* <Navigation token={token} user={user} /> */}
+      <NavBar token={token} user={user} />
       <ApplicationViews token={token} user={user} />
       {/* <Link to="/categories" className="navbar-item">Categories</Link>
       <Login token={token} setToken={setToken} setUser={setUser} />
