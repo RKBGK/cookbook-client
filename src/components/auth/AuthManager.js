@@ -12,14 +12,12 @@ export const loginUser = (user) => {
     })
     .then(res => res.json())
     .then(res => {
-        if ("valid" in res && res.valid && "token" in res) {
+    
             localStorage.setItem("lu_token", res.token)
             localStorage.setItem("user", res.user)
-            console.log(res)
-        }
     })
   }
-  
+//         if ("valid" in res && res.valid && "token" in res) {
   export const registerUser = (newUser) => {
     return fetch("http://127.0.0.1:8000/register", {
       method: "POST",
@@ -30,11 +28,10 @@ export const loginUser = (user) => {
       body: JSON.stringify(newUser)
     }).then(res => res.json())
     .then(res => {
-        if ("valid" in res && res.valid && "token" in res) {
             localStorage.setItem("lu_token", res.token)
             localStorage.setItem("user", res.user)
             console.log(res)
-        }
+
     })
   }
   

@@ -17,7 +17,7 @@ export const Login = ({ setToken, setUser }) => {
     }
 
     loginUser(user).then(res => {
-    //   if ("valid" in res && res.valid) {
+    // if (res.includes("valid") && res.includes("token") ) {
     if (res != null) {
         setToken(res.token)
         setUser(res.user)

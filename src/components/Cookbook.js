@@ -1,5 +1,6 @@
 
 import React, { useState,useEffect } from "react"
+import { Link } from 'react-router-dom';
 import { ApplicationViews } from "./ApplicationViews"
 // import { Login } from "./auth/Login"
 // import { Register } from "./auth/Register"
@@ -24,10 +25,15 @@ export const Cookbook = () => {
 
       </header>
       <Navigation token={token} user={user} />
-      <ApplicationViews />
-
-      {/* <Login token={token} setToken={setToken} setUser={setUser} />
+      <ApplicationViews token={token} user={user} />
+      {/* <Link to="/categories" className="navbar-item">Categories</Link>
+      <Login token={token} setToken={setToken} setUser={setUser} />
       <Register token={token} setToken={setToken}/> */}
+      {user ? (
+                <Link to="/categories" className="navbar-item">Categories</Link>
+            ) : (
+            ''
+            )}
     </div>
   );
 }

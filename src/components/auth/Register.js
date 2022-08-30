@@ -50,7 +50,7 @@ export const Register = ({setToken}) => {
 
       registerUser(newUser)
         .then(res => {
-          if ("valid" in res && res.valid) {
+          if (res.valid !== 'undefined') {
             setToken(res.token)
             navigate("/")
           }
