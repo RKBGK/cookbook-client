@@ -1,5 +1,6 @@
 
 import React, { useState,useEffect } from "react"
+import { ApplicationViews } from "./ApplicationViews"
 // import { Login } from "./auth/Login"
 // import { Register } from "./auth/Register"
 
@@ -23,6 +24,7 @@ export const Cookbook = () => {
 
       </header>
       <Navigation token={token} user={user} />
+      <ApplicationViews />
 
       {/* <Login token={token} setToken={setToken} setUser={setUser} />
       <Register token={token} setToken={setToken}/> */}
