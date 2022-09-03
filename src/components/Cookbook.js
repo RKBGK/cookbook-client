@@ -1,41 +1,54 @@
 
-import React, { useState,useEffect } from "react"
-import { Link } from 'react-router-dom';
-import { ApplicationViews } from "./ApplicationViews"
-import { NavBar } from "./nav/NavBar";
-// import { Login } from "./auth/Login"
-// import { Register } from "./auth/Register"
+import React, { useState } from "react"
 
-// import Navigation from "./nav/Navigation"
+import { Routes, Route, Navigate} from 'react-router-dom';
+import { ApplicationViews } from "./ApplicationViews"
+
+import { NavBar } from "./nav/NavBar";
 
 
 export const Cookbook = () => {
-    const [token, setToken] = useState(localStorage.getItem('token'))
-    const [user, setUser] = useState(localStorage.getItem('user'))
+    const [token, setTokenState] = useState(localStorage.getItem('token'))
 
-    useEffect(() => {
-        setToken()
-        setUser()
-    },[])
-    // useEffect(() => {setUser()},[])
-    console.log(token)
-    console.log(user)
+    const setToken = (newToken) => {
+        localStorage.setItem('token', newToken)
+        setTokenState(newToken)
+      }
+    
+      const setUserId = (userid) => {
+        localStorage.setItem('user', userid)
+        console.log(localStorage.getItem('userId'))
+      }
+// useEffect(() => {
+//     setTokenState(localStorage.getItem("token"))
+// },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
+    <>
+        <Routes>
+            <Route render={() => {
+                if (token) {
+                    return <>
+                        <Route>
 
-      </header>
-      {/* <Navigation token={token} user={user} /> */}
-      <NavBar token={token} user={user} />
-      <ApplicationViews token={token} user={user} />
-      {/* <Link to="/categories" className="navbar-item">Categories</Link>
-      <Login token={token} setToken={setToken} setUser={setUser} />
-      <Register token={token} setToken={setToken}/> */}
-      {user ? (
-                <Link to="/categories" className="navbar-item">Categories</Link>
-            ) : (
-            ''
-            )}
-    </div>
+                            <NavBar token={token} setToken={setToken} />
+                            <ApplicationViews token={token} setToken={setToken} setUserId={setUserId}/>
+
+                        </Route>
+                    </>
+                } else {
+                    return <Navigate to="/login" />
+
+
+                }
+            }} />
+
+
+        </Routes>
+
+         <NavBar token={token} setToken={setToken} />
+         <ApplicationViews token={token} setToken={setToken} setUserId={setUserId}/>
+
+    </>
   );
 }

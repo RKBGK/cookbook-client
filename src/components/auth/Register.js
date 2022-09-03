@@ -1,7 +1,7 @@
 import React, { useRef } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate} from "react-router-dom"
-import { registerUser } from "./AuthManager"
+// import { registerUser } from "./AuthManager"
 
 
 export const Register = ({setToken}) => {
@@ -14,6 +14,7 @@ export const Register = ({setToken}) => {
   const verifyPassword = useRef()
   const passwordDialog = useRef()
   const image_url = useRef()
+ 
   const navigate = useNavigate();
   
   var today = new Date();
@@ -48,16 +49,24 @@ export const Register = ({setToken}) => {
         active:1
       }
 
-      registerUser(newUser)
-        .then(res => {
-          if (res.valid !== 'undefined') {
-            setToken(res.token)
-            navigate("/")
-          }
-        })
-    } else {
-      passwordDialog.current.showModal()
-    }
+      return fetch("http://127.0.0.1:8000/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(newUser)
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if ("token" in res) {
+                        localStorage.setItem("token", res.token)
+                        navigate("/login")
+                    }
+                })
+        } else {
+            passwordDialog.current.showModal()
+        }
   }
 
   return (

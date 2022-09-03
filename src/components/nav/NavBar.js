@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom"
 import "./NavBar.css"
 import Logo from "./cookbook.jpeg"
 
-export const NavBar = ({ token, setToken }) => {
+export const NavBar = ({ token, setToken}) => {
+  
   const navigate = useNavigate();
   const navbar = useRef()
   const hamburger = useRef()
@@ -27,8 +28,34 @@ export const NavBar = ({ token, setToken }) => {
         </a>
       </div>
 
+
       <div className="navbar-menu" ref={navbar}>
-        <div className="navbar-start">
+      <div className="navbar-start">
+          
+                <Link to="/" className="navbar-item">Home</Link>
+                {/* <Link to="/recipes" className="navbar-item">Recipes </Link>    
+                <Link to="/subscriptions" className="navbar-item">Subscriptions </Link>   */}
+                {/* <Link to="/categories" className="navbar-item">Categories</Link>   */}
+        
+          {
+            token
+              ?
+              <> 
+                <Link to="/recipes" className="navbar-item">Recipes </Link>    
+              </> 
+              :
+              ""
+          }
+          {
+            token
+              ?
+              <> 
+                <Link to="/subscriptions" className="navbar-item">Subscriptions </Link>  
+              </> 
+              :
+              ""
+          }
+
           {
             token
               ?
@@ -38,8 +65,9 @@ export const NavBar = ({ token, setToken }) => {
               :
               ""
           }
-        </div>
 
+
+</div>
         <div className="navbar-end">
           <div className="navbar-item">
             <div className="buttons">
@@ -52,6 +80,7 @@ export const NavBar = ({ token, setToken }) => {
                   }}>Logout</button>
                   :
                   <>
+                  
                     <Link to="/register" className="button is-link">Register</Link>
                     <Link to="/login" className="button is-outlined">Login</Link>
                   </>
