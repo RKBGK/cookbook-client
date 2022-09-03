@@ -28,7 +28,7 @@ export const Login = ({ setUserId, setToken }) => {
                 localStorage.setItem("token", res.token)
                 localStorage.setItem("user", res.user)
                 setToken(res.token)
-                setUserId(res.userId)
+                setUserId(res.user)
                 navigate('/')
 
             }

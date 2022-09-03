@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import "./NavBar.css"
 import Logo from "./cookbook.jpeg"
 
-export const NavBar = ({ token, setTokenState}) => {
+export const NavBar = ({ token, setToken}) => {
   
   const navigate = useNavigate();
   const navbar = useRef()
@@ -32,9 +32,29 @@ export const NavBar = ({ token, setTokenState}) => {
       <div className="navbar-menu" ref={navbar}>
       <div className="navbar-start">
           
-                <Link to="/recipes" className="navbar-item">Recipes </Link>  
+                <Link to="/" className="navbar-item">Home</Link>
+                {/* <Link to="/recipes" className="navbar-item">Recipes </Link>    
+                <Link to="/subscriptions" className="navbar-item">Subscriptions </Link>   */}
                 {/* <Link to="/categories" className="navbar-item">Categories</Link>   */}
-        </div>
+        
+          {
+            token
+              ?
+              <> 
+                <Link to="/recipes" className="navbar-item">Recipes </Link>    
+              </> 
+              :
+              ""
+          }
+          {
+            token
+              ?
+              <> 
+                <Link to="/subscriptions" className="navbar-item">Subscriptions </Link>  
+              </> 
+              :
+              ""
+          }
 
           {
             token
@@ -47,6 +67,7 @@ export const NavBar = ({ token, setTokenState}) => {
           }
 
 
+</div>
         <div className="navbar-end">
           <div className="navbar-item">
             <div className="buttons">
@@ -54,7 +75,7 @@ export const NavBar = ({ token, setTokenState}) => {
                 token
                   ?
                   <button className="button is-outlined" onClick={() => {
-                    setTokenState('')
+                    setToken('')
                     navigate('/login')
                   }}>Logout</button>
                   :
