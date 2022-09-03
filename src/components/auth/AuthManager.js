@@ -11,6 +11,8 @@ export const loginUser = (user) => {
       })
     })
     .then(res => res.json())
+
+    
   }
 //         if ("valid" in res && res.valid && "token" in res) {
   export const registerUser = (newUser) => {
@@ -22,18 +24,9 @@ export const loginUser = (user) => {
       },
       body: JSON.stringify(newUser)
     }).then(res => res.json())
-    .then(res => {
-            localStorage.setItem("lu_token", res.token)
-            localStorage.setItem("user", res.user)
-            console.log(res)
 
-    })
+    
+    
   }
   
 
-//   .then(res => {
-    
-//     localStorage.setItem("lu_token", res.token)
-//     localStorage.setItem("user", res.user)
-// })
-  
