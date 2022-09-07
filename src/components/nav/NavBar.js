@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import "./NavBar.css"
 import Logo from "./cookbook.jpeg"
 
-export const NavBar = ({ token, setToken}) => {
+export const NavBar = ({ token, setToken, setUser}) => {
   
   const navigate = useNavigate();
   const navbar = useRef()
@@ -76,6 +76,8 @@ export const NavBar = ({ token, setToken}) => {
                   ?
                   <button className="button is-outlined" onClick={() => {
                     setToken('')
+                    setUser('')
+
                     navigate('/login')
                   }}>Logout</button>
                   :

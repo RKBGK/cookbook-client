@@ -2,7 +2,7 @@ import React, { useRef } from "react"
 import { Link, useNavigate} from "react-router-dom"
 // import { loginUser } from "./AuthManager"
 
-export const Login = ({ setUserId, setToken }) => {
+export const Login = ({ setUser, setToken }) => {
   const username = useRef()
   const password = useRef()
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ export const Login = ({ setUserId, setToken }) => {
                 localStorage.setItem("token", res.token)
                 localStorage.setItem("user", res.user)
                 setToken(res.token)
-                setUserId(res.user)
+                setUser(res.user)
                 navigate('/')
 
             }

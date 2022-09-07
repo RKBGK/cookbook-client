@@ -7,7 +7,7 @@ import { CategoryList } from "./category/CategoryList"
 import { RecipeList } from "./recipe/RecipeList"
 import { SubscriptionList } from "./subscriptions/SubscriptionsList"
 // token={token} setToken={setToken} setUserId={setUserId}
-export const ApplicationViews = ({ token,setToken,setUserId } ) => {
+export const ApplicationViews = ({ token,setToken, user ,setUser} ) => {
     const PrivateRoute = ({ children }) => {
         return token? children : <Navigate to="/login" />;
       }
@@ -15,15 +15,15 @@ export const ApplicationViews = ({ token,setToken,setUserId } ) => {
     <>
         <Routes>
             <Route exact path="/" element={<Home/>} />
-            <Route exact path="/login" element={<Login setToken={setToken} setUserId={setUserId}/>} />
+            <Route exact path="/login" element={<Login setToken={setToken} setUser={setUser}/>} />
             <Route exact path="/register" element={<Register />} />
             <Route exact path="/recipes" element={<RecipeList  />} />
-            <Route exact path="/subscriptions" element={<SubscriptionList  />} />
+            <Route exact path="/subscriptions" element={<SubscriptionList user={user} />} />
             <Route exact path="/categories" element={<CategoryList/> } />
 
-            <Route element={<PrivateRoute token={token}/>}>
+            {/* <Route element={<PrivateRoute token={token}/>}>
 
-            </Route>
+            </Route> */}
             {/* <Route exact path="/appcard" component={() => <AppCards user={user} />} /> */} 
             {/* <Route exact path="/categories" element={
                     <PrivateRoute>

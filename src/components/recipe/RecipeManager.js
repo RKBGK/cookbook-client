@@ -14,7 +14,7 @@ export const deleteRecipe = (id) => {
     return fetch(`${remoteURL}/recipes${id}`, {
         method: "DELETE",
         headers: {
-            "Authorization": `Token ${localStorage.getItem("ltoken")}`
+            "Authorization": `Token ${localStorage.getItem("token")}`
         }
      })
         .then(getRecipes)
