@@ -9,15 +9,16 @@ import { NavBar } from "./nav/NavBar";
 
 export const Cookbook = () => {
     const [token, setTokenState] = useState(localStorage.getItem('token'))
+    const [user, setUserState] = useState(localStorage.getItem('user'))
 
     const setToken = (newToken) => {
         localStorage.setItem('token', newToken)
         setTokenState(newToken)
       }
     
-      const setUserId = (userid) => {
-        localStorage.setItem('user', userid)
-        console.log(localStorage.getItem('userId'))
+      const setUser= (user) => {
+        localStorage.setItem('user', user)
+        setUserState(user)
       }
 // useEffect(() => {
 //     setTokenState(localStorage.getItem("token"))
@@ -31,8 +32,8 @@ export const Cookbook = () => {
                     return <>
                         <Route>
 
-                            <NavBar token={token} setToken={setToken} />
-                            <ApplicationViews token={token} setToken={setToken} setUserId={setUserId}/>
+                            <NavBar token={token} setToken={setToken} setUser={setUser}  />
+                            <ApplicationViews token={token} setToken={setToken} user={user} setUser={setUser}/>
 
                         </Route>
                     </>
@@ -47,7 +48,7 @@ export const Cookbook = () => {
         </Routes>
 
          <NavBar token={token} setToken={setToken} />
-         <ApplicationViews token={token} setToken={setToken} setUserId={setUserId}/>
+         <ApplicationViews token={token} setToken={setToken} setUser={setUser}/>
 
     </>
   );
