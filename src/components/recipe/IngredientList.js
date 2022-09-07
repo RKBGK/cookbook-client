@@ -11,7 +11,7 @@ import "../styles/recipe.css"
 //     )
 // }
 
-export const IngredientList = ( {key, ingredient, quantity, measure} ) => {
+export const IngredientList = ( {key, ingredient, quantity, unit} ) => {
 
     return (
         <>
@@ -22,7 +22,7 @@ export const IngredientList = ( {key, ingredient, quantity, measure} ) => {
                             <div className="recipe_title">{key}</div>
                             <div className="recipe_title">{ingredient}</div>
                             <div className="recipe_date">{quantity}</div>
-                            <div className="recipe_date">{measure}</div>
+                            <div className="recipe_date">{unit}</div>
                  
                         
          
