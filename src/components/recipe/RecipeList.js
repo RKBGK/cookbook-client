@@ -36,33 +36,25 @@ export const RecipeList = () => {
             <h1>hi</h1>
 
                 {
-     
-                    recipes.map(({recipe , detailList }, i)=> {
-                        return <section key={`recipe--${recipe.id}`} className="card">
+                    recipes.map((recipe)=> {
+                        return(
+                         <section key={`recipe--${recipe.id}`} className="card">
                             <div className="recipe_title">{recipe.id}</div>
                             <div className="recipe_title">{recipe.title}</div>
                             <div className="recipe_date">{recipe.publication_date}</div>
-                        
-                            detailList.length &&
-                            detailList.map((data, j) => (
-                                <li key={i} span={12} spanSm={12} spanMd={6} spanLg={6}>
-                                    <IngredientList
-                                    key={data.id}
-                                    ingredient={data.ingredient}
-                                    quantity={data.quantity}
-                                    measure={data.measure}
-                                    />
-                                </li>
-    ))
-
-
-                 
+                            {recipe.element.map((data) => {
+                                    return(
+                                        <IngredientList
+                                        key={data.id}
+                                        ingredient={data.ingredient}
+                                        quantity={data.quantity}
+                                        unit={data.unit}
+                                        />)
+                            })
+                            }
                             <VscTrash onClick={() => handleMethod('delete',recipe.id)}/>
-         
-
-
                         </section>
-                    })
+                    )})
                 }
             </article>
 
