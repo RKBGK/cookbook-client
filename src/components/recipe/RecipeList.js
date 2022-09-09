@@ -4,7 +4,7 @@ import { deleteRecipe, getRecipes } from "./RecipeManager.js";
 // import { useNavigate } from "react-router-dom";
 import { VscTrash} from "react-icons/vsc";
 import "../styles/recipe.css"
-import { IngredientList } from "./IngredientList.js";
+// import { IngredientList } from "./IngredientList.js";
 
 // export const RecipeList = () => {
 
@@ -42,16 +42,35 @@ export const RecipeList = () => {
                             <div className="recipe_title">{recipe.id}</div>
                             <div className="recipe_title">{recipe.title}</div>
                             <div className="recipe_date">{recipe.publication_date}</div>
-                            {recipe.element.map((data) => {
+                            {recipe.element.length ? (
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                    <th>NO</th>
+                                    <th>Ingredient</th>
+                                    <th>Quantity</th>
+                                    <th>Unit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{recipe.element.map((data,index) => {
                                     return(
-                                        <IngredientList
-                                        key={data.id}
-                                        ingredient={data.ingredient}
-                                        quantity={data.quantity}
-                                        unit={data.unit}
-                                        />)
-                            })
-                            }
+                                        <tr>
+                                        <td>{index}</td>
+                                        <td>{data.ingredient}</td>
+                                        <td>{data.quantity}</td>
+                                        <td>{data.unit}</td>
+                                        </tr>
+                                )})
+                                     }
+                            
+                                </tbody>
+                             </table>)
+                             : null}
+                            {recipe.category.map((data) => {
+                                    return(
+                                        <h5>{data.label}</h5>
+                            )})}
+                            
                             <VscTrash onClick={() => handleMethod('delete',recipe.id)}/>
                         </section>
                     )})

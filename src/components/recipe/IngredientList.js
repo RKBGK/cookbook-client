@@ -11,26 +11,53 @@ import "../styles/recipe.css"
 //     )
 // }
 
-export const IngredientList = ( {key, ingredient, quantity, unit} ) => {
+export const IngredientList = ( {index, ingredient, quantity, unit} ) => {
 
     return (
         <>
            <article className="recipes">
-            <h1>hi</h1>
-
-                <section key={`ingredient-${key}`} className="card">
-                            <div className="recipe_title">{key}</div>
-                            <div className="recipe_title">{ingredient}</div>
-                            <div className="recipe_date">{quantity}</div>
-                            <div className="recipe_date">{unit}</div>
+                <section key={`ingredient-${index}`} className="card">
+                        <div className="recipe_title"> {index+1} {ingredient} ---{quantity} {unit}</div>
                  
-                        
-         
-
-
                         </section>
             </article>
 
         </>
     )
 }
+
+export const JsonDataDisplay = () =>{
+    const DisplayData=JsonData.map(
+        (info)=>{
+            return(
+                <tr>
+                    <td>{info.id}</td>
+                    <td>{info.name}</td>
+                    <td>{info.city}</td>
+                </tr>
+            )
+        }
+    )
+ 
+    return(
+        <div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                    <th>Sr.NO</th>
+                    <th>Name</th>
+                    <th>City</th>
+                    </tr>
+                </thead>
+                <tbody>
+                 
+                    
+                    {DisplayData}
+                    
+                </tbody>
+            </table>
+             
+        </div>
+    )
+ }
+ 
