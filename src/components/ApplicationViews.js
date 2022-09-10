@@ -4,6 +4,8 @@ import { Home } from "."
 import { Login } from "./auth/Login"
 import { Register } from "./auth/Register"
 import { CategoryList } from "./category/CategoryList"
+import { IngredientForm } from "./ingredients/IngredientForm"
+import { IngredientList } from "./ingredients/IngredientList"
 import { RecipeForm } from "./recipe/RecipeForm"
 import { RecipeList } from "./recipe/RecipeList"
 import { SubscriptionList } from "./subscriptions/SubscriptionsList"
@@ -23,6 +25,9 @@ export const ApplicationViews = ({ token,setToken, user ,setUser} ) => {
             <Route exact path="/categories" element={<CategoryList/> } />
             <Route exact path="/recipes/new" element={<RecipeForm/> } />
             <Route exact path="/recipes/:id" element={<RecipeForm/> } />
+            <Route exact path="/ingredients" element={<IngredientList/> } />
+            <Route exact path="/ingredientnew" element={<IngredientForm/> } />
+            <Route exact path="/ingredientedit/:id" element={<IngredientForm/> } />
 
             {/* <Route element={<PrivateRoute token={token}/>}>
 

@@ -66,7 +66,7 @@ export const RecipeList = () => {
                                 </tbody>
                              </table>)
                              : null}
-                            {recipe.category.map((data) => {
+                            {recipe.categories.map((data) => {
                                     return(
                                         <h5>{data.label}</h5>
                             )})}

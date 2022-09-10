@@ -30,9 +30,9 @@ export const RecipeForm = () => {
         image_url: "",
         description: "",
         video_url: "",
-        recipe: "",
+        directions: "",
         cookingtime: "",
-        category: [],
+        categories: [],
         
     })
 
@@ -52,11 +52,11 @@ export const RecipeForm = () => {
                         image_url: res.image_url,
                         description: res.description,
                         video_url: res.video_url,
-                        recipe: res.recipe,
+                        directions: res.directions,
                         cookingtime: res.cookingtime,
-                        category:res.category
+                        categories:res.categories
                     })
-                    const recipeCategories = res.category.map(categoryObj => parseInt(categoryObj.id))
+                    const recipeCategories = res.categories.map(categoryObj => parseInt(categoryObj.id))
                     setCheckedCategories(recipeCategories)
                     console.log('currentRecipe',currentRecipe)
                 }                
@@ -67,7 +67,7 @@ export const RecipeForm = () => {
 
     useEffect(() => {
         const changedRecipe = { ...currentRecipe }
-        changedRecipe.category = checkedCategories
+        changedRecipe.categories = checkedCategories
         setCurrentRecipe(changedRecipe )
     }, [checkedCategories])
 
@@ -137,9 +137,9 @@ export const RecipeForm = () => {
                         />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="recipe">Recipe:</label>
-                    <input type="text" name="recipe" required autoFocus className="form-control"
-                        defaultValue={currentRecipe.Recipe}
+                    <label htmlFor="directions">Directions:</label>
+                    <input type="text" name="directions" required autoFocus className="form-control"
+                        defaultValue={currentRecipe.directions}
                         onChange={changeRecipeState}
                         />
                 </div>
@@ -181,9 +181,9 @@ export const RecipeForm = () => {
                         image_url: currentRecipe.image_url,
                         video_url: currentRecipe.video_url,
                         description: currentRecipe.description,
-                        recipe: currentRecipe.recipe,
+                        directions: currentRecipe.directions,
                         publication_date: currentRecipe.publication_date,
-                        category: [...checkedCategories]
+                        categories: [...checkedCategories]
                     }
 
                     {editMode ?
