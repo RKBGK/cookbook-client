@@ -4,6 +4,7 @@ import { Home } from "."
 import { Login } from "./auth/Login"
 import { Register } from "./auth/Register"
 import { CategoryList } from "./category/CategoryList"
+import { RecipeForm } from "./recipe/RecipeForm"
 import { RecipeList } from "./recipe/RecipeList"
 import { SubscriptionList } from "./subscriptions/SubscriptionsList"
 // token={token} setToken={setToken} setUserId={setUserId}
@@ -20,6 +21,8 @@ export const ApplicationViews = ({ token,setToken, user ,setUser} ) => {
             <Route exact path="/recipes" element={<RecipeList  />} />
             <Route exact path="/subscriptions" element={<SubscriptionList user={user} />} />
             <Route exact path="/categories" element={<CategoryList/> } />
+            <Route exact path="/recipes/new" element={<RecipeForm/> } />
+            <Route exact path="/recipes/:id" element={<RecipeForm/> } />
 
             {/* <Route element={<PrivateRoute token={token}/>}>
 

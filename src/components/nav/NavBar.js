@@ -50,6 +50,15 @@ export const NavBar = ({ token, setToken, setUser}) => {
             token
               ?
               <> 
+                <Link to="/recipes/new" className="navbar-item">Add New Recipes </Link>    
+              </> 
+              :
+              ""
+          }
+          {
+            token
+              ?
+              <> 
                 <Link to="/subscriptions" className="navbar-item">Subscriptions </Link>  
               </> 
               :
