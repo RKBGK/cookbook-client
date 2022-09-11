@@ -1,7 +1,9 @@
 import React, { useState, useEffect} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCategories } from "../category/CategoryManager";
-import { createNewRecipe, getRecipeById, updateRecipe } from "./RecipeManager";
+import { getIngredients } from "../ingredients/IngredientManager";
+import { RecipeIngredientForm } from "./RecipeIngredientForm";
+import { createNewRecipe, getMeasures, getRecipeById, updateRecipe } from "./RecipeManager";
 // import { getCategory } from "./category/CategoryManager";
 
 
@@ -14,6 +16,24 @@ export const RecipeForm = () => {
     const [checkedCategories, setCheckedCategories] = useState([])
     const { id } = useParams()
     const editMode = id ? true : false
+    const [ingredients, setIngredients] = useState([]);
+    const [measures, setMeasures] = useState([]);
+
+    const [recipeIngredients, setRecipeIngredients] = useState([
+        { ingredient: 0, quantity: 0, measure: 0 }
+    ])
+
+    useEffect(() => {
+        getIngredients().then((ingredients) => {
+            setIngredients(ingredients);
+        })
+        getMeasures().then((measures) => {
+            setMeasures(measures);
+        })
+            console.log('measures',measures)
+            console.log('ingredients',ingredients)
+
+    }, []);
 
     var today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
@@ -169,6 +189,8 @@ export const RecipeForm = () => {
                     }
                 </div>
             </fieldset>
+            <RecipeIngredientForm/>
+            
 
             <button type="submit"
                 onClick={evt => {

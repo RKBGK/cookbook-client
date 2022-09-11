@@ -1,5 +1,26 @@
 const remoteURL = "http://localhost:8000"
 
+// export const getMeasures = () => new Promise((resolve, reject) => {
+//     return fetch(`${remoteURL}/measures`, {
+//         headers:{
+//             "Authorization": `Token ${localStorage.getItem("token")}`
+//         }
+//     })
+//     .then((response) => resolve(response.json())
+//     )
+//     .catch(reject);
+    
+// })
+
+export const getMeasures = () =>  {
+    return fetch(`${remoteURL}/measures`, {
+        headers:{
+            "Authorization": `Token ${localStorage.getItem("token")}`
+        }
+    })
+    .then(response=> response.json()) 
+    
+}
 export const getRecipes = () => {
     return fetch(`${remoteURL}/recipes`, {
         headers:{

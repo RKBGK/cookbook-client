@@ -42,6 +42,7 @@ export const RecipeList = () => {
                             <div className="recipe_title">{recipe.id}</div>
                             <div className="recipe_title">{recipe.title}</div>
                             <div className="recipe_date">{recipe.publication_date}</div>
+                            <div className="recipe_img"> <img className="reciprecard-img" src={recipe.image_url} /></div>
                             {recipe.element.length ? (
                             <table class="table table-striped">
                                 <thead>

@@ -46,6 +46,16 @@ export const NavBar = ({ token, setToken, setUser}) => {
               :
               ""
           }
+          
+          {
+            token
+              ?
+              <> 
+                <Link to="/recipeingredient" className="navbar-item">RecipesIngredient</Link>    
+              </> 
+              :
+              ""
+          }
           {
             token
               ?
