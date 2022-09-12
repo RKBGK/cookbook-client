@@ -40,7 +40,7 @@ export const RecipeForm = () => {
         directions: "",
         cookingtime: "",
         categories: [],
-        element:[]
+        // element:[]
         
     })
 
@@ -65,11 +65,15 @@ export const RecipeForm = () => {
                         directions: res.directions,
                         cookingtime: res.cookingtime,
                         categories:res.categories,
-                        element:res.element
+                        // element:res.element
                     })
                     const recipeCategories = res.categories.map(categoryObj => parseInt(categoryObj.id))
                     setCheckedCategories(recipeCategories)
-                    console.log('currentRecipe',currentRecipe)
+                    const recipeingredientlist = res.element.map(({ingredient,quantity,unit})=>{
+                        return[ingredient,quantity,unit]
+                    })
+                    setRecipeIngredients(recipeingredientlist)
+                    
                 }                
             })        
         }
@@ -204,11 +208,11 @@ export const RecipeForm = () => {
             </fieldset>
             <div className="recipe-ingredient-form">
             {/* <form> */}
-                  {recipeIngredients.map((form, index) => {
+                  {recipeIngredients.map((recipeIngredient, index) => {
                     return (
                         <div key={index}>
                             <select name="ingredient" required autoFocus className="form-control"
-                                value={form.ingredient}
+                                value={recipeIngredient.ingredient}
                                 onChange={event => handleIngredientFormChange(event, index)}>
                                 <option value="0">Select Ingredient</option>
                                 {
@@ -223,10 +227,10 @@ export const RecipeForm = () => {
                                 name='quantity'
                                 placeholder='Quantity'
                                 onChange={event => handleIngredientFormChange(event, index)}
-                                value = {form.amount}
+                                value = {recipeIngredient.quantity}
                             />
                             <select name="measure" required autoFocus className="form-control"
-                                value={form.measure}
+                                value={recipeIngredient.measure}
                                 onChange={event => handleIngredientFormChange(event, index)}>
                                 <option value="0">Select unit</option>
                                 {
@@ -264,7 +268,7 @@ export const RecipeForm = () => {
                         directions: currentRecipe.directions,
                         publication_date: currentRecipe.publication_date,
                         categories: [...checkedCategories],
-                        element:[...recipeIngredients]
+                        // element:[...recipeIngredients]
                         
                         
                     }

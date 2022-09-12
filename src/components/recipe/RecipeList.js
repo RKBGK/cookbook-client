@@ -1,8 +1,8 @@
 import React,  { useState, useEffect } from "react";
 // import { useState, useEffect } from "react";
 import { deleteRecipe, getRecipes } from "./RecipeManager.js";
-// import { useNavigate } from "react-router-dom";
-import { VscTrash} from "react-icons/vsc";
+import { Link } from "react-router-dom";
+import { VscTrash, VscEdit} from "react-icons/vsc";
 import "../styles/recipe.css"
 // import { IngredientList } from "./IngredientList.js";
 
@@ -73,6 +73,7 @@ export const RecipeList = () => {
                             )})}
                             
                             <VscTrash onClick={() => handleMethod('delete',recipe.id)}/>
+                            <Link to={`/recipeedit/${recipe.id}`} ><VscEdit/ > </Link>
                         </section>
                     )})
                 }

@@ -24,8 +24,8 @@ export const ApplicationViews = ({ token,setToken, user ,setUser} ) => {
             <Route exact path="/recipes" element={<RecipeList  />} />
             <Route exact path="/subscriptions" element={<SubscriptionList user={user} />} />
             <Route exact path="/categories" element={<CategoryList/> } />
-            <Route exact path="/recipes/new" element={<RecipeForm/> } />
-            <Route exact path="/recipes/:id" element={<RecipeForm/> } />
+            <Route exact path="/recipenew" element={<RecipeForm/> } />
+            <Route exact path="/recipeedit/:id" element={<RecipeForm/> } />
             <Route exact path="/ingredients" element={<IngredientList/> } />
             <Route exact path="/ingredientnew" element={<IngredientForm/> } />
             <Route exact path="/recipeingredient" element={<RecipeIngredientForm/> } />
