@@ -46,6 +46,16 @@ export const NavBar = ({ token, setToken, setUser}) => {
               :
               ""
           }
+          
+          {
+            token
+              ?
+              <> 
+                <Link to="/recipeingredient" className="navbar-item">RecipesIngredient</Link>    
+              </> 
+              :
+              ""
+          }
           {
             token
               ?
@@ -59,7 +69,7 @@ export const NavBar = ({ token, setToken, setUser}) => {
             token
               ?
               <> 
-                <Link to="/recipes/new" className="navbar-item">Add New Recipes </Link>    
+                <Link to="/recipenew" className="navbar-item">Add New Recipes </Link>    
               </> 
               :
               ""

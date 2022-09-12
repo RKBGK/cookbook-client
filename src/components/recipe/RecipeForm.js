@@ -1,7 +1,8 @@
 import React, { useState, useEffect} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCategories } from "../category/CategoryManager";
-import { createNewRecipe, getRecipeById, updateRecipe } from "./RecipeManager";
+import { getIngredients } from "../ingredients/IngredientManager";
+import { createNewRecipe, getMeasures, getRecipeById, updateRecipe } from "./RecipeManager";
 // import { getCategory } from "./category/CategoryManager";
 
 
@@ -10,10 +11,16 @@ import { createNewRecipe, getRecipeById, updateRecipe } from "./RecipeManager";
 
 export const RecipeForm = () => {
     const navigate = useNavigate()
+    const [ingredients, setIngredients] = useState([]);
+    const [measures, setMeasures] = useState([]);
     const [categories, setCategories] = useState([])
     const [checkedCategories, setCheckedCategories] = useState([])
     const { id } = useParams()
     const editMode = id ? true : false
+    const [recipeIngredients, setRecipeIngredients] = useState([
+        { ingredient: 0, quantity: 0, measure: 0 }
+    ])
+
 
     var today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
@@ -33,12 +40,15 @@ export const RecipeForm = () => {
         directions: "",
         cookingtime: "",
         categories: [],
+        // element:[]
         
     })
 
 
     useEffect(() => {
         getCategories().then(setCategories)
+        getIngredients().then(setIngredients)
+        getMeasures().then(setMeasures)
         console.log(categories)
         if (editMode) {
             let isMounted = true;
@@ -54,11 +64,16 @@ export const RecipeForm = () => {
                         video_url: res.video_url,
                         directions: res.directions,
                         cookingtime: res.cookingtime,
-                        categories:res.categories
+                        categories:res.categories,
+                        // element:res.element
                     })
                     const recipeCategories = res.categories.map(categoryObj => parseInt(categoryObj.id))
                     setCheckedCategories(recipeCategories)
-                    console.log('currentRecipe',currentRecipe)
+                    const recipeingredientlist = res.element.map(({ingredient,quantity,unit})=>{
+                        return[ingredient,quantity,unit]
+                    })
+                    setRecipeIngredients(recipeingredientlist)
+                    
                 }                
             })        
         }
@@ -71,6 +86,11 @@ export const RecipeForm = () => {
         setCurrentRecipe(changedRecipe )
     }, [checkedCategories])
 
+    const handleIngredientFormChange = (event, index) => {
+        let data = [...recipeIngredients];
+        data[index][event.target.name] = event.target.value;
+        setRecipeIngredients(data);
+    }
     const changeRecipeState = (e) => {
         const newRecipe = { ...currentRecipe}
         if (e.target.name.includes("category")) {
@@ -93,6 +113,23 @@ export const RecipeForm = () => {
         setCurrentRecipe(newRecipe)
     }
 
+    const addExistingIngredient = (event) => {
+        event.preventDefault()
+        let object = {
+            ingredient: 0,
+            quantity: 0,
+            measure: 0
+        }
+
+        setRecipeIngredients([...recipeIngredients, object])
+        console.log('recipeIngredients',recipeIngredients)
+    }
+
+    const removeExistingIngredient = (index) => {
+        let data = [...recipeIngredients];
+        data.splice(index, 1)
+        setRecipeIngredients(data)
+    }
     return(
         <form className="recipeForm">
             <h2 className="recipeForm_title">Add a new Recipe</h2>
@@ -169,6 +206,53 @@ export const RecipeForm = () => {
                     }
                 </div>
             </fieldset>
+            <div className="recipe-ingredient-form">
+            {/* <form> */}
+                  {recipeIngredients.map((recipeIngredient, index) => {
+                    return (
+                        <div key={index}>
+                            <select name="ingredient" required autoFocus className="form-control"
+                                value={recipeIngredient.ingredient}
+                                onChange={event => handleIngredientFormChange(event, index)}>
+                                <option value="0">Select Ingredient</option>
+                                {
+                                    ingredients.map((ingredient) => (
+                                        <option key={ingredient.id} value={ingredient.id}>
+                                            {ingredient.label}
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                            <input
+                                name='quantity'
+                                placeholder='Quantity'
+                                onChange={event => handleIngredientFormChange(event, index)}
+                                value = {recipeIngredient.quantity}
+                            />
+                            <select name="measure" required autoFocus className="form-control"
+                                value={recipeIngredient.measure}
+                                onChange={event => handleIngredientFormChange(event, index)}>
+                                <option value="0">Select unit</option>
+                                {
+                                    measures.map((unit) => (
+                                        <option key={unit.id} value={unit.id}>
+                                            {unit.unit}
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                            <button onClick={() => removeExistingIngredient(index)}>Remove</button>
+                        </div>
+                    )
+                })}
+            {/* </form> */}
+            <div className="form-btns">
+                <button onClick={addExistingIngredient}  >Add Ingredient</button>
+                {/* <button onClick={addNewIngredient}>Create Ingredient</button> */}
+            </div>
+            
+        </div>
+            
 
             <button type="submit"
                 onClick={evt => {
@@ -183,7 +267,10 @@ export const RecipeForm = () => {
                         description: currentRecipe.description,
                         directions: currentRecipe.directions,
                         publication_date: currentRecipe.publication_date,
-                        categories: [...checkedCategories]
+                        categories: [...checkedCategories],
+                        // element:[...recipeIngredients]
+                        
+                        
                     }
 
                     {editMode ?
