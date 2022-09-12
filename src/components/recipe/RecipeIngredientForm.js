@@ -5,6 +5,7 @@ import { getMeasures } from "./RecipeManager";
 export const  RecipeIngredientForm = () => {
     const [ingredients, setIngredients] = useState([]);
     const [measures, setMeasures] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [recipeIngredients, setRecipeIngredients] = useState([
         { ingredient: 0, quantity: 0, measure: 0 }
@@ -13,13 +14,12 @@ export const  RecipeIngredientForm = () => {
     useEffect(() => {
         getIngredients().then((ingredients) => {
             setIngredients(ingredients);
+            setIsLoading(false);
         })
         getMeasures().then((measures) => {
             setMeasures(measures);
+            
         })
-            console.log('measures',measures)
-            console.log('ingredients',ingredients)
-
     }, []);
 
     const handleExistingFormChange = (event, index) => {
@@ -36,6 +36,7 @@ export const  RecipeIngredientForm = () => {
         }
 
         setRecipeIngredients([...recipeIngredients, object])
+        console.log('recipeIngredients',recipeIngredients)
     }
 
     const removeExistingIngredient = (index) => {
@@ -46,20 +47,11 @@ export const  RecipeIngredientForm = () => {
 
     return (
         <>
-        <div className="cocktail-ingredient-form">
+
+                          
+        <div className="recipe-ingredient-form">
             <form>
-            <select name="ingredient" required autoFocus className="form-control"
-                                >
-                                <option value="0">Select Ingredient</option>
-                                {
-                                    measures.map((ingredient) => (
-                                        <option key={ingredient.id} value={ingredient.id}>
-                                            {ingredient.label}
-                                        </option>
-                                    ))
-                                }
-                            </select>
-                {recipeIngredients.map((form, index) => {
+                  {recipeIngredients.map((form, index) => {
                     return (
                         <div key={index}>
                             <select name="ingredient" required autoFocus className="form-control"
@@ -69,7 +61,7 @@ export const  RecipeIngredientForm = () => {
                                 {
                                     ingredients.map((ingredient) => (
                                         <option key={ingredient.id} value={ingredient.id}>
-                                            {ingredient.name}
+                                            {ingredient.label}
                                         </option>
                                     ))
                                 }
@@ -87,7 +79,7 @@ export const  RecipeIngredientForm = () => {
                                 {
                                     measures.map((unit) => (
                                         <option key={unit.id} value={unit.id}>
-                                            {unit.label}
+                                            {unit.unit}
                                         </option>
                                     ))
                                 }
@@ -98,7 +90,7 @@ export const  RecipeIngredientForm = () => {
                 })}
             </form>
             <div className="form-btns">
-                <button onClick={addExistingIngredient}>Add Ingredient</button>
+                <button onClick={addExistingIngredient} disabled={isLoading} >Add Ingredient</button>
                 {/* <button onClick={addNewIngredient}>Create Ingredient</button> */}
             </div>
             
