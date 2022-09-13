@@ -1,0 +1,50 @@
+ul {
+    background-color: #659DBD !important;
+    text-align: center;
+}
+
+.navbar {
+    background-color: #659DBD !important;
+}
+
+.navbar__background {
+    background-color: #659DBD;
+}
+
+.nav-link {
+    color: white !important;
+    padding-left:10px;
+    padding-right:10px;
+    margin-left:7px;
+    margin-right:7px;
+    margin-bottom: 7px;
+}
+
+.nav__logo {
+    height: 30px;
+    margin-left: 20px;
+    margin-top: 6px;
+    background-color: transparent;
+}
+
+.navbar-brand {
+    color: white !important;
+    background-color: #659DBD !important;
+    border-left: 1px solid white !important;
+    border-radius: none;
+    height: 50px;
+    padding-top: 4.5px;
+}
+
+.navbar__logout {
+    line-height: 35px;
+}
+
+ul li:nth-child(7),
+.navbar__span {
+    background-color: #659DBD !important;
+    width: 100px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}

@@ -1,0 +1,13 @@
+.recipeForm{
+width:90%;
+margin-left:10px
+}
+.form-cat{
+    display: flex;
+  
+}
+.recipe-ingredient-form{
+    width:20%;
+    margin-left:10px
+}
+

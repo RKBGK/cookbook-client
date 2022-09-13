@@ -1,182 +1,299 @@
-import React, { useState, useEffect } from "react"
-import { useHistory } from 'react-router-dom'
-import { getIngredients } from "../fetch/IngredientsManager"
-import { getPreparations, getIce, getGlass, createCocktail } from "../fetch/CocktailManager"
-import "./Cocktail.css"
-import { CocktailIngredients } from "./CocktailIngredientForm"
+import React, { useState, useEffect} from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCategories } from "../category/CategoryManager";
+import { getIngredients } from "../ingredients/IngredientManager";
+import { createNewRecipe, getMeasures, getRecipeById, updateRecipe } from "./RecipeManager";
+// import { getCategory } from "./category/CategoryManager";
 
 
-export const CocktailForm = () => {
-    const history = useHistory()
-    const [cocktailIngredients, setCocktailIngredients] = useState([]);
-    const [newIngredients, setNewIngredients] = useState([]);
-    const [preparations, setPreparations] = useState([]);
-    const [ice, setIce] = useState([]);
-    const [glass, setGlass] = useState([]);
 
-    const getCocktailIngredients = (data) => {
-        setCocktailIngredients(data)
-    };
+export const RecipeForm = () => {
+    const navigate = useNavigate()
+    const [ingredients, setIngredients] = useState([]);
+    const [measures, setMeasures] = useState([]);
+    const [categories, setCategories] = useState([])
+    const [checkedCategories, setCheckedCategories] = useState([])
+    const { id } = useParams()
+    const editMode = id ? true : false
+    const [recipeIngredients, setRecipeIngredients] = useState([])
 
-    const getNewIngredients = (data) => {
-        setNewIngredients(data)
-    };
 
-    const [currentCocktail, setCurrentCocktail] = useState({
-        name: "",
+    var today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    
+    today = `${yyyy}-${mm}-${dd}`;
+    //     user : localStorage.getItem("lu_token"),
+
+    const [currentRecipe, setCurrentRecipe] = useState({
+        
+        title: "",
+        publication_date: today,
+        image_url: "",
         description: "",
-        instructions: "",
-        preparation: 0,
-        glass: 0,
-        ice: 0,
-        img_url: ""
+        video_url: "",
+        directions: "",
+        cookingtime: "",
+        categories: [],
+        element:[]
+        
     })
 
+
     useEffect(() => {
-        getPreparations().then((data) => setPreparations(data))
-        getIngredients().then((data) => setIngredients(data))
-        getIce().then((data) => setIce(data))
-        getGlass().then((data) => setGlass(data))
+        getCategories().then(setCategories)
+        getIngredients().then(setIngredients)
+        getMeasures().then(setMeasures)
+      
+        if (editMode) {
+            let isMounted = true;
+            getRecipeById(id).then((res) => {
+
+                if (isMounted) {
+                    setCurrentRecipe({
+
+                        title: res.title,
+                        publication_date: res.publication_date,
+                        image_url: res.image_url,
+                        description: res.description,
+                        video_url: res.video_url,
+                        directions: res.directions,
+                        cookingtime: res.cookingtime,
+                        categories:res.categories,
+                        element:res.element
+                    })
+                    const recipeCategories = res.categories.map(categoryObj => parseInt(categoryObj.id))
+                    setCheckedCategories(recipeCategories)
+                    // const recipeingredientlist = res.element.map(({ingredient,quantity,unit})=>{
+                    //     return[ingredient,quantity,unit]
+                    // })
+                    setRecipeIngredients(res.element)
+                    
+                    
+                }                
+            })        
+        }
+        
     }, [])
 
-    const changeCocktailState = (domEvent) => {
-        let newCocktail = {...currentCocktail}
-        let newValue = domEvent.target.value
-        newCocktail[domEvent.target.name] = newValue
-        setCurrentCocktail(newCocktail)
+    useEffect(() => {
+        const changedRecipe = { ...currentRecipe }
+        changedRecipe.categories = checkedCategories
+        setCurrentRecipe(changedRecipe )
+    }, [checkedCategories])
+
+    const handleIngredientFormChange = (event, index) => {
+        let data = [...recipeIngredients];
+        data[index][event.target.name] = event.target.value;
+        setRecipeIngredients(data);
+    }
+    const changeRecipeState = (e) => {
+        const newRecipe = { ...currentRecipe}
+        if (e.target.name.includes("category")) {
+            const currentCategories = [...checkedCategories]
+            if (e.target.checked) {
+                currentCategories.push(parseInt(e.target.value))
+            } else {
+                const index = currentCategories.indexOf(parseInt(e.target.value))
+                currentCategories.splice(index, 1)
+            }
+
+            setCheckedCategories(currentCategories)
+        }
+
+        let selectedVal = e.target.value
+        if (e.target.name.includes("Id")){
+            selectedVal = parseInt(selectedVal)
+        }
+        newRecipe[e.target.name] = selectedVal
+        setCurrentRecipe(newRecipe)
     }
 
-    return (
-        <form className="cocktail-form">
-            <h2 className="cocktail-form-title">New Cocktail</h2>
-            <fieldset>
-                <div className="form-group">
-                    <label htmlFor="name">Name:</label>
-                    <input type="text" name="name" required autoFocus className="form-control"
-                        value={currentCocktail.name}
-                        onChange={changeCocktailState}
-                    />
-                </div>
-            </fieldset>
+    const addExistingIngredient = (event) => {
+        event.preventDefault()
+        let object = {
+            ingredient: 0,
+            quantity: 0,
+            measure: 0
+        }
 
+        setRecipeIngredients([...recipeIngredients, object])
+   
+    }
+
+    const removeExistingIngredient = (index) => {
+        let data = [...recipeIngredients];
+        data.splice(index, 1)
+        setRecipeIngredients(data)
+    }
+    return(
+        <form className="recipeForm">
+            <h2 className="recipeForm_title">Add a new Recipe</h2>
             <fieldset>
+            <div className="form-group">
+                    <label htmlFor="title">Title:</label>
+                    <input type="text" name="title" required autoFocus className="form-control"
+                        defaultValue={currentRecipe.title}
+                        onChange={changeRecipeState}
+                        />
+                </div>
+                {/* <div className="form-group">
+                    <label htmlFor="category">Category:</label>
+                    <select value={currentPost.category} name="category" onChange={changePostState} className="form-control">
+                        <option value="0">Select a Category</option>
+                        {categories.map(l => (
+                            <option key={l.id} value={l.id}>
+                                {l.label}
+                            </option>
+                        ))}
+                    </select>
+                </div> */}
+                <div className="form-group">
+                    <label htmlFor="image_url">Image URL:</label>
+                    <input type="text" name="image_url" required autoFocus className="form-control"
+                        defaultValue={currentRecipe.image_url}
+                        onChange={changeRecipeState}
+                        />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="video_url">Image URL:</label>
+                    <input type="text" name="video_url" required autoFocus className="form-control"
+                        defaultValue={currentRecipe.video_url}
+                        onChange={changeRecipeState}
+                        />
+                </div>
                 <div className="form-group">
                     <label htmlFor="description">Description:</label>
                     <input type="text" name="description" required autoFocus className="form-control"
-                        value={currentCocktail.description}
-                        onChange={changeCocktailState}
-                    />
+                        defaultValue={currentRecipe.description}
+                        onChange={changeRecipeState}
+                        />
                 </div>
-            </fieldset>
-
-            <fieldset>
                 <div className="form-group">
-                    <label htmlFor="preparation">Preparation:</label>
-                    <select name="preparation" required autoFocus className="form-control"
-                        value={currentCocktail.preparation}
-                        onChange={changeCocktailState}>
-                        <option value="0">Select Preparation</option>
-                        {
-                            preparations.map((preparation) => (
-                                <option key={preparation.id} value={preparation.id}>
-                                    {preparation.label}
-                                </option>
-                            ))
-                        }
-                    </select>
+                    <label htmlFor="directions">Directions:</label>
+                    <textarea type="text" rows="7" name="directions" required autoFocus className="form-control"
+                        defaultValue={currentRecipe.directions}
+                        onChange={changeRecipeState}
+                        />
                 </div>
-            </fieldset>
-
-            <fieldset>
                 <div className="form-group">
-                    <label htmlFor="ice">Ice:</label>
-                    <select name="ice" required autoFocus className="form-control"
-                        value={currentCocktail.ice}
-                        onChange={changeCocktailState}>
-                        <option value="0">Select Ice</option>
-                        {
-                            ice.map((ice) => (
-                                <option key={ice.id} value={ice.id}>
-                                    {ice.label}
-                                </option>
-                            ))
-                        }
-                    </select>
+                    <label htmlFor="cookingtime">cooktime:</label>
+                    <input type="text" name="cookingtime" required autoFocus className="form-control"
+                        defaultValue={currentRecipe.cookingtime}
+                        onChange={changeRecipeState}
+                        />
                 </div>
             </fieldset>
-
             <fieldset>
-                <div className="form-group">
-                    <label htmlFor="glass">Glass:</label>
-                    <select name="glass" required autoFocus className="form-control"
-                        value={currentCocktail.glass}
-                        onChange={changeCocktailState}>
-                        <option value="0">Select Glass</option>
-                        {
-                            glass.map((glass) => (
-                                <option key={glass.id} value={glass.id}>
-                                    {glass.label}
-                                </option>
-                            ))
-                        }
-                    </select>
+                <div className="form-group form-cat">
+                    <h6> Categories:</h6>
+                    {
+                        categories.map(c => {
+                            return <div key={c.id} className="categoryCheckbox">
+                                <input type="checkbox"
+                                    name={`category ${c.id}`}
+                                    value={c.id}
+                                    checked={checkedCategories.includes(c.id)}
+                                    onChange={changeRecipeState}
+                                ></input>
+                                <label htmlFor={c.id}> {c.label}</label>
+                            </div>
+                        })
+                    }
                 </div>
             </fieldset>
-
-            <fieldset>
-                <div className="form-group">
-                    <label htmlFor="instructions">Instructions:</label>
-                    <input type="text" name="instructions" required autoFocus className="form-control"
-                        value={currentCocktail.instructions}
-                        onChange={changeCocktailState}
-                    />
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <div className="form-group">
-                    <label htmlFor="img_url">Image URL:</label>
-                    <input type="text" name="img_url" required autoFocus className="form-control"
-                        value={currentCocktail.img_url}
-                        onChange={changeCocktailState}
-                    />
-                </div>
-            </fieldset>
+            <div >
+            {/* <form> */}
+         <table>
+            <thead>
+                <tr>
+                <th>Ingredient</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+                </tr>
+            </thead>
+                <tbody>
+                  {recipeIngredients.map((recipeIngredient, index) => {
+                    console.log('single ingredient',recipeIngredient.ingredient, index)
+                    // value={Object.values(recipeIngredient.ingredient)[index]}
+                    return (
+                        <tr>
+                        <div className="col recipe-ingredient-form d-inline-block" key={index} wrap="wrap" >
+                            <td><select name="ingredient" required autoFocus className="d-inline-block"
+                                value={recipeIngredient.ingredient}
+                                onChange={event => handleIngredientFormChange(event, index)}>
+                                <option value="0">Select Ingredient</option>
+                                {
+                                    ingredients.map((ingredient) => (
+                                        <option key={ingredient.id} value={ingredient.id}>
+                                            {ingredient.label}
+                                        </option>
+                                    ))
+                                }
+                            </select></td>
+                            <td><input
+                                name='quantity'
+                                placeholder='Quantity'
+                                onChange={event => handleIngredientFormChange(event, index)}
+                                value = {recipeIngredient.quantity}
+                            /></td>
+                            <td><select name="measure" required autoFocus className="d-inline-block"
+                                value={recipeIngredient.measure}
+                                onChange={event => handleIngredientFormChange(event, index)}>
+                                <option value="0">Select unit</option>
+                                {
+                                    measures.map((unit) => (
+                                        <option key={unit.id} value={unit.id}>
+                                            {unit.unit}
+                                        </option>
+                                    ))
+                                }
+                            </select></td>
+                            <td>
+                            <button onClick={() => removeExistingIngredient(index)}>Remove</button></td>
+                        </div></tr>
+                    )
+                    
+                })}</tbody></table>
+            {/* </form> */}
+            <div className="form-btns">
+                <button onClick={addExistingIngredient}  >Add Ingredient</button>
+                {/* <button onClick={addNewIngredient}>Create Ingredient</button> */}
+            </div>
+            
+        </div>
+            
 
             <button type="submit"
                 onClick={evt => {
-
                     evt.preventDefault()
+                   
 
-                    newIngredients.map(ingredient => {
-                        ingredient.name = ingredient.name
-                        ingredient.type = parseInt(ingredient.type)
-                        console.log(ingredient)
-                    })
-
-// ---------------------------------------------------------------------------------
-                    cocktailIngredients.map((ingredient) => {
-                        ingredient.ingredient = parseInt(ingredient.ingredient)
-                        ingredient.amount = parseFloat(ingredient.amount)
-                        ingredient.unit = parseInt(ingredient.unit)
-
-                        console.log(ingredient)
-                    })
-// ---------------------------------------------------------------------------------
-                    const cocktail = {
-                        name: currentCocktail.name,
-                        description: currentCocktail.description,
-                        instructions: currentCocktail.instructions,
-                        preparation: parseInt(currentCocktail.preparation),
-                        glass: parseInt(currentCocktail.glass),
-                        ice: parseInt(currentCocktail.ice),
-                        img_url: currentCocktail.img_url
+                    const recipe = {
+                        title: currentRecipe.title,
+                        cookingtime: parseInt(currentRecipe.cookingtime),
+                        image_url: currentRecipe.image_url,
+                        video_url: currentRecipe.video_url,
+                        description: currentRecipe.description,
+                        directions: currentRecipe.directions,
+                        publication_date: currentRecipe.publication_date,
+                        categories: [...checkedCategories],
+                        element:[...recipeIngredients]
+                        
+                        
                     }
 
-                    createCocktail(cocktail)     
-
+                    {editMode ?
+                        (updateRecipe({...recipe, id})
+                        .then(() => navigate("/recipes"))):
+                        (createNewRecipe(recipe)
+                        .then(() => navigate("/recipes")))
+                    }
+                    
                 }}
-                className="btn">Submit</button>
+                className="btn btn-primary">{editMode ? "Update" : "Add a new recipe"}</button>
         </form>
     )
 }
+
