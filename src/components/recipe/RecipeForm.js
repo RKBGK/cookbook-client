@@ -122,7 +122,8 @@ export const RecipeForm = () => {
    
     }
 
-    const removeExistingIngredient = (index) => {
+    const removeExistingIngredient = (event,index) => {
+        event.preventDefault()
         let data = [...recipeIngredients];
         data.splice(index, 1)
         setRecipeIngredients(data)
@@ -219,7 +220,7 @@ export const RecipeForm = () => {
                     // value={Object.values(recipeIngredient.ingredient)[index]}
                     return (
                         <tr>
-                        <div className="col recipe-ingredient-form d-inline-block" key={index} wrap="wrap" >
+                        {/* <div className="col recipe-ingredient-form d-inline-block" key={index} wrap="wrap" > */}
                             <td><select name="ingredient" required autoFocus className="d-inline-block"
                                 value={recipeIngredient.ingredient}
                                 onChange={event => handleIngredientFormChange(event, index)}>
@@ -251,8 +252,9 @@ export const RecipeForm = () => {
                                 }
                             </select></td>
                             <td>
-                            <button onClick={() => removeExistingIngredient(index)}>Remove</button></td>
-                        </div></tr>
+                            <button onClick={event =>removeExistingIngredient(event, index)}>Remove</button></td>
+                        {/* </div> */}
+                        </tr>
                     )
                     
                 })}</tbody></table>
