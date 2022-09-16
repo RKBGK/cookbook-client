@@ -125,7 +125,9 @@ export const RecipeForm = () => {
     const removeExistingIngredient = (event,index) => {
         event.preventDefault()
         let data = [...recipeIngredients];
+        console.log('data before', data)
         data.splice(index, 1)
+        console.log('data after', data)
         setRecipeIngredients(data)
     }
     return(
@@ -216,7 +218,7 @@ export const RecipeForm = () => {
             </thead>
                 <tbody>
                   {recipeIngredients.map((recipeIngredient, index) => {
-                    console.log('single ingredient',recipeIngredient.ingredient, index)
+                    console.log('single ingredient',recipeIngredient, index)
                     // value={Object.values(recipeIngredient.ingredient)[index]}
                     return (
                         <tr>
@@ -227,7 +229,7 @@ export const RecipeForm = () => {
                                 <option value="0">Select Ingredient</option>
                                 {
                                     ingredients.map((ingredient) => (
-                                        <option key={ingredient.id} value={ingredient.id}>
+                                        <option key={ingredient.label} value={ingredient.label}>
                                             {ingredient.label}
                                         </option>
                                     ))
@@ -240,12 +242,12 @@ export const RecipeForm = () => {
                                 value = {recipeIngredient.quantity}
                             /></td>
                             <td><select name="measure" required autoFocus className="d-inline-block"
-                                value={recipeIngredient.measure}
+                                value={recipeIngredient.unit}
                                 onChange={event => handleIngredientFormChange(event, index)}>
                                 <option value="0">Select unit</option>
                                 {
                                     measures.map((unit) => (
-                                        <option key={unit.id} value={unit.id}>
+                                        <option key={unit.unit} value={unit.unit}>
                                             {unit.unit}
                                         </option>
                                     ))
