@@ -39,9 +39,9 @@ export const RecipeList = () => {
                     recipes.map((recipe)=> {
                         return(
                          <section key={`recipe--${recipe.id}`} className="card">
-                            <div className="recipe_id">{recipe.id}</div>
+                            {/* <div className="recipe_id">{recipe.id}</div> */}
                             <div className="recipe_title">{recipe.title}</div>
-                            <div className="recipe_date">{recipe.publication_date}</div>
+                            {/* <div className="recipe_date">{recipe.publication_date}</div> */}
                             <div className="recipe_img"> <img className="reciprecard-img" src={recipe.image_url} alt="recipe"/></div>
                             {recipe.element.length ? (
                             <table class="table table-striped">
@@ -57,9 +57,9 @@ export const RecipeList = () => {
                                     return(
                                         <tr>
                                         <td>{index}</td>
-                                        <td>{data.ingredient}</td>
+                                        <td>{data.ingredient.label}</td>
                                         <td>{data.quantity}</td>
-                                        <td>{data.unit}</td>
+                                        <td>{data.measure.unit}</td>
                                         </tr>
                                 )})
                                      }

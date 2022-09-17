@@ -7,8 +7,6 @@ import { createNewRecipe, getMeasures, getRecipeById, updateRecipe } from "./Rec
 
 
 
-
-
 export const RecipeForm = () => {
     const navigate = useNavigate()
     const [ingredients, setIngredients] = useState([]);
@@ -17,9 +15,7 @@ export const RecipeForm = () => {
     const [checkedCategories, setCheckedCategories] = useState([])
     const { id } = useParams()
     const editMode = id ? true : false
-    const [recipeIngredients, setRecipeIngredients] = useState([
-        { ingredient: 0, quantity: 0, measure: 0 }
-    ])
+    const [recipeIngredients, setRecipeIngredients] = useState([])
 
 
     var today = new Date();
@@ -40,7 +36,7 @@ export const RecipeForm = () => {
         directions: "",
         cookingtime: "",
         categories: [],
-        // element:[]
+        element:[]
         
     })
 
@@ -49,7 +45,7 @@ export const RecipeForm = () => {
         getCategories().then(setCategories)
         getIngredients().then(setIngredients)
         getMeasures().then(setMeasures)
-        console.log(categories)
+      
         if (editMode) {
             let isMounted = true;
             getRecipeById(id).then((res) => {
@@ -65,14 +61,15 @@ export const RecipeForm = () => {
                         directions: res.directions,
                         cookingtime: res.cookingtime,
                         categories:res.categories,
-                        // element:res.element
+                        element:res.element
                     })
                     const recipeCategories = res.categories.map(categoryObj => parseInt(categoryObj.id))
                     setCheckedCategories(recipeCategories)
-                    const recipeingredientlist = res.element.map(({ingredient,quantity,unit})=>{
-                        return[ingredient,quantity,unit]
-                    })
-                    setRecipeIngredients(recipeingredientlist)
+                    // const recipeingredientlist = res.element.map(({ingredient,quantity,unit})=>{
+                    //     return[ingredient,quantity,unit]
+                    // })
+                    setRecipeIngredients(res.element)
+                    
                     
                 }                
             })        
@@ -88,7 +85,7 @@ export const RecipeForm = () => {
 
     const handleIngredientFormChange = (event, index) => {
         let data = [...recipeIngredients];
-        data[index][event.target.name] = event.target.value;
+        data[index][event.target.name] = parseInt(event.target.value);
         setRecipeIngredients(data);
     }
     const changeRecipeState = (e) => {
@@ -122,12 +119,15 @@ export const RecipeForm = () => {
         }
 
         setRecipeIngredients([...recipeIngredients, object])
-        console.log('recipeIngredients',recipeIngredients)
+   
     }
 
-    const removeExistingIngredient = (index) => {
+    const removeExistingIngredient = (event,index) => {
+        event.preventDefault()
         let data = [...recipeIngredients];
+        console.log('data before', data)
         data.splice(index, 1)
+        console.log('data after', data)
         setRecipeIngredients(data)
     }
     return(
@@ -175,7 +175,7 @@ export const RecipeForm = () => {
                 </div>
                 <div className="form-group">
                     <label htmlFor="directions">Directions:</label>
-                    <input type="text" name="directions" required autoFocus className="form-control"
+                    <textarea type="text" rows="7" name="directions" required autoFocus className="form-control"
                         defaultValue={currentRecipe.directions}
                         onChange={changeRecipeState}
                         />
@@ -189,8 +189,8 @@ export const RecipeForm = () => {
                 </div>
             </fieldset>
             <fieldset>
-                <div className="form-group">
-                    <h3> categories:</h3>
+                <div className="form-group form-cat">
+                    <h6> Categories:</h6>
                     {
                         categories.map(c => {
                             return <div key={c.id} className="categoryCheckbox">
@@ -206,13 +206,25 @@ export const RecipeForm = () => {
                     }
                 </div>
             </fieldset>
-            <div className="recipe-ingredient-form">
+            <div >
             {/* <form> */}
+         <table>
+            <thead>
+                <tr>
+                <th>Ingredient</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+                </tr>
+            </thead>
+                <tbody>
                   {recipeIngredients.map((recipeIngredient, index) => {
+                    console.log('single ingredient',recipeIngredient, index)
+                    // value={Object.values(recipeIngredient.ingredient)[index]}
                     return (
-                        <div key={index}>
-                            <select name="ingredient" required autoFocus className="form-control"
-                                value={recipeIngredient.ingredient}
+                        <tr>
+                        {/* <div className="col recipe-ingredient-form d-inline-block" key={index} wrap="wrap" > */}
+                            <td><select name="ingredient" required autoFocus className="d-inline-block"
+                                value={recipeIngredient.ingredient.id}
                                 onChange={event => handleIngredientFormChange(event, index)}>
                                 <option value="0">Select Ingredient</option>
                                 {
@@ -222,15 +234,15 @@ export const RecipeForm = () => {
                                         </option>
                                     ))
                                 }
-                            </select>
-                            <input
+                            </select></td>
+                            <td><input
                                 name='quantity'
                                 placeholder='Quantity'
                                 onChange={event => handleIngredientFormChange(event, index)}
                                 value = {recipeIngredient.quantity}
-                            />
-                            <select name="measure" required autoFocus className="form-control"
-                                value={recipeIngredient.measure}
+                            /></td>
+                            <td><select name="measure" required autoFocus className="d-inline-block"
+                                value={recipeIngredient.measure.id}
                                 onChange={event => handleIngredientFormChange(event, index)}>
                                 <option value="0">Select unit</option>
                                 {
@@ -240,11 +252,14 @@ export const RecipeForm = () => {
                                         </option>
                                     ))
                                 }
-                            </select>
-                            <button onClick={() => removeExistingIngredient(index)}>Remove</button>
-                        </div>
+                            </select></td>
+                            <td>
+                            <button onClick={event =>removeExistingIngredient(event, index)}>Remove</button></td>
+                        {/* </div> */}
+                        </tr>
                     )
-                })}
+                    
+                })}</tbody></table>
             {/* </form> */}
             <div className="form-btns">
                 <button onClick={addExistingIngredient}  >Add Ingredient</button>
@@ -268,7 +283,7 @@ export const RecipeForm = () => {
                         directions: currentRecipe.directions,
                         publication_date: currentRecipe.publication_date,
                         categories: [...checkedCategories],
-                        // element:[...recipeIngredients]
+                        element:[...recipeIngredients]
                         
                         
                     }
@@ -285,4 +300,3 @@ export const RecipeForm = () => {
         </form>
     )
 }
-
