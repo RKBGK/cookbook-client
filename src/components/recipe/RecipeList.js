@@ -42,11 +42,11 @@ export const RecipeList = () => {
                             {/* <div className="recipe_id">{recipe.id}</div> */}
                             <div className="recipe_title">{recipe.title}</div>
                             {/* <div className="recipe_date">{recipe.publication_date}</div> */}
-                            <div className="recipe_img"> <img className="reciprecard-img" src={recipe.image_url} alt="recipe"/></div>
+                            <div className="photoimg"> <img  src={recipe.image_url} alt="recipe"/></div>
                             {recipe.element.length ? (
-                            <table class="table table-striped">
+                            <table className="intable table table-striped">
                                 <thead>
-                                    <tr>
+                                    <tr key={`thead--${recipe.id}`}>
                                     <th>NO</th>
                                     <th>Ingredient</th>
                                     <th>Quantity</th>
@@ -55,7 +55,7 @@ export const RecipeList = () => {
                                 </thead>
                                 <tbody>{recipe.element.map((data,index) => {
                                     return(
-                                        <tr>
+                                        <tr key={`ri--${index}`}>
                                         <td>{index}</td>
                                         <td>{data.ingredient.label}</td>
                                         <td>{data.quantity}</td>
@@ -71,7 +71,7 @@ export const RecipeList = () => {
                                     return(
                                         <h5>{data.label}</h5>
                             )})}
-                            
+                            <div className="recipe_title">{recipe.directions}</div>
                             <VscTrash onClick={() => handleMethod('delete',recipe.id)}/>
                             <Link to={`/recipeedit/${recipe.id}`} ><VscEdit/ > </Link>
                         </section>

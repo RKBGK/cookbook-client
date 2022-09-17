@@ -11,3 +11,14 @@ margin-left:10px
     margin-left:10px
 }
 
+.photoimg {
+    height: 200px;
+    width: 400px;
+    overflow: hidden;
+    display: inline-flex;
+}
+
+.intable {
+    width:90%;
+    margin-left: 40px;
+}
