@@ -85,7 +85,7 @@ export const RecipeForm = () => {
 
     const handleIngredientFormChange = (event, index) => {
         let data = [...recipeIngredients];
-        data[index][event.target.name] = event.target.value;
+        data[index][event.target.name] = parseInt(event.target.value);
         setRecipeIngredients(data);
     }
     const changeRecipeState = (e) => {
@@ -224,12 +224,12 @@ export const RecipeForm = () => {
                         <tr>
                         {/* <div className="col recipe-ingredient-form d-inline-block" key={index} wrap="wrap" > */}
                             <td><select name="ingredient" required autoFocus className="d-inline-block"
-                                value={recipeIngredient.ingredient}
+                                value={recipeIngredient.ingredient.id}
                                 onChange={event => handleIngredientFormChange(event, index)}>
                                 <option value="0">Select Ingredient</option>
                                 {
                                     ingredients.map((ingredient) => (
-                                        <option key={ingredient.label} value={ingredient.label}>
+                                        <option key={ingredient.id} value={ingredient.id}>
                                             {ingredient.label}
                                         </option>
                                     ))
@@ -242,12 +242,12 @@ export const RecipeForm = () => {
                                 value = {recipeIngredient.quantity}
                             /></td>
                             <td><select name="measure" required autoFocus className="d-inline-block"
-                                value={recipeIngredient.unit}
+                                value={recipeIngredient.measure.id}
                                 onChange={event => handleIngredientFormChange(event, index)}>
                                 <option value="0">Select unit</option>
                                 {
                                     measures.map((unit) => (
-                                        <option key={unit.unit} value={unit.unit}>
+                                        <option key={unit.id} value={unit.id}>
                                             {unit.unit}
                                         </option>
                                     ))
@@ -300,4 +300,3 @@ export const RecipeForm = () => {
         </form>
     )
 }
-

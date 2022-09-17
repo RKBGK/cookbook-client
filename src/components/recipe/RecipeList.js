@@ -57,9 +57,9 @@ export const RecipeList = () => {
                                     return(
                                         <tr>
                                         <td>{index}</td>
-                                        <td>{data.ingredient}</td>
+                                        <td>{data.ingredient.label}</td>
                                         <td>{data.quantity}</td>
-                                        <td>{data.unit}</td>
+                                        <td>{data.measure.unit}</td>
                                         </tr>
                                 )})
                                      }
